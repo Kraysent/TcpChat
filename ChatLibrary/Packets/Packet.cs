@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Net;
 
-namespace ChatLibrary
+namespace ChatLibrary.Packets
 {
     public abstract class Packet
     {
+        //Somehow create an abstract const string Header
+
         protected const char DELIM = '|';
 
         public abstract override string ToString();
 
         /// <summary>
-        /// Looks threw all types of packets and returns needed; in other cases throws an exception
+        /// [FOR CLIENT] Looks threw all types of packets and returns needed; in other cases throws an exception
         /// </summary>
         /// <param name="packet"></param>
         /// <returns></returns>
@@ -27,6 +29,12 @@ namespace ChatLibrary
             }
         }
 
+        /// <summary>
+        /// [FOR SERVER] Looks threw all the types of packets and returns needed; in other cases throws an exception
+        /// </summary>
+        /// <param name="packet"></param>
+        /// <param name="senderIP"></param>
+        /// <returns></returns>
         public static Packet Parse(string packet, IPAddress senderIP)
         {
             string[] split = packet.Split(DELIM);
@@ -35,6 +43,8 @@ namespace ChatLibrary
             {
                 case MessagePacket.Header:
                     return new MessagePacket(new User(split[1], int.Parse(split[3]), senderIP), split[2]);
+                case RegistrationRequestPacket.Header:
+                    return new RegistrationRequestPacket(new User(split[1], int.Parse(split[2]), senderIP));
                 default:
                     throw new ArgumentException("Can not convert string to Packet");
             }

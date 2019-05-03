@@ -1,4 +1,5 @@
 ﻿using ChatLibrary;
+using ChatLibrary.Packets;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -36,6 +37,7 @@ namespace Client
             Console.Write("Enter your name: ");
             name = Console.ReadLine();
             _currentUser = new User(name, _clientPort, _clientIP);
+            SendPacket(new RegistrationRequestPacket(_currentUser));
             
             while (true)
             {

@@ -1,4 +1,5 @@
 ﻿using ChatLibrary;
+using ChatLibrary.Packets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -78,16 +79,25 @@ namespace Server
             if (packet is MessagePacket)
             {
                 MessagePacket msg = packet as MessagePacket;
-
-                if (RegisterUser(msg.Sender) == false)
+                
+                if (UserRegistered(msg.Sender))
                 {
-                    Console.WriteLine($"{msg.Sender.Name} connected to chat!");
-                    SendPacket(new MessagePacket(new User("Server"), $"{msg.Sender.Name} connected to chat!"));
+                    Console.WriteLine($"{msg.Sender.Name}: {msg.Text}");
+
+                    SendPacket(msg);
                 }
+            }
 
-                Console.WriteLine($"{msg.Sender.Name}: {msg.Text}");
+            if (packet is RegistrationRequestPacket)
+            {
+                RegistrationRequestPacket register = packet as RegistrationRequestPacket;
 
-                SendPacket(msg);
+                if (!UserRegistered(register.Sender))
+                {
+                    RegisterUser(register.Sender);
+                    Console.WriteLine($"{register.Sender.Name} connected to chat!");
+                    SendPacket(new MessagePacket(new User("Server"), $"{register.Sender.Name} connected to chat!"));
+                }
             }
         }
 
@@ -115,16 +125,22 @@ namespace Server
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        static bool RegisterUser(User user)
+        static void RegisterUser(User user)
         {
-            bool userRegistered = _users.Select(x => x.Name).Contains(user.Name);
-
-            if (!userRegistered)
+            if (!UserRegistered(user))
             {
                 _users.Add(user);
             }
+        }
 
-            return userRegistered;
+        /// <summary>
+        /// Checks if user exists in system
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
+        static bool UserRegistered(User user)
+        {
+            return _users.Any(x => x.Name == user.Name);
         }
 
         //------------------------------------------------------------//
