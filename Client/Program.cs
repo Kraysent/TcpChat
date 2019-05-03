@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatLibrary;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -29,6 +30,8 @@ namespace Client
             _listener = new TcpListener(IPAddress.Any, _rnd.Next(10000));
             _listener.Start();
             RecievePackets();
+
+            Console.WriteLine("--------------Client started--------------");
 
             Console.Write("Enter your name: ");
             name = Console.ReadLine();
@@ -66,11 +69,7 @@ namespace Client
                 stream.Close();
 
                 packet = Packet.Parse(message);
-
-                if (packet is MessagePacket)
-                {
-                    MessageRecievedRaise(packet as MessagePacket);
-                }
+                PacketRecievedRaise(packet);
             }
         }
 
@@ -111,74 +110,9 @@ namespace Client
         /// Raised only in RecievePackets() method
         /// </summary>
         /// <param name="msg"></param>
-        static void MessageRecievedRaise(Packet msg)
+        static void PacketRecievedRaise(Packet msg)
         {
             PacketRecieved?.Invoke(msg);
-        }
-    }
-    
-    class User
-    {
-        public string Name { get; set; }
-        public int Port { get; set; }
-        public IPAddress IP { get; set; }
-
-        public User(string name, int port, IPAddress ip)
-        {
-            Name = name;
-            Port = port;
-            IP = ip;
-        }
-
-        public User(string name)
-        {
-            Name = name;
-        }
-    }
-    
-    abstract class Packet
-    {
-        protected const char DELIM = '|';
-        
-        public abstract override string ToString();
-
-        /// <summary>
-        /// Looks threw all types of packets and returns needed; in other cases throws an exception
-        /// </summary>
-        /// <param name="packet"></param>
-        /// <returns></returns>
-        public static Packet Parse(string packet)
-        {
-            string[] split = packet.Split(DELIM);
-
-            switch (split[0])
-            {
-                case MessagePacket.Header:
-                    return new MessagePacket(new User(split[1]), split[2]);
-                default:
-                    throw new ArgumentException("Can not convert string to Packet");
-            }
-        }
-    }
-
-    class MessagePacket : Packet
-    {
-        public const string Header = "Message";
-        public User Sender { get; set; }
-        public string Text { get; set; }
-
-        public MessagePacket(User sender, string text)
-        {
-            Sender = sender;
-            Text = text;
-        }
-        
-        public override string ToString()
-        {
-            if (Sender.Port == 0)
-                return $"{Header}{DELIM}{Sender.Name}{DELIM}{Text}";
-            else
-                return $"{Header}{DELIM}{Sender.Name}{DELIM}{Text}{DELIM}{Sender.Port}";
         }
     }
 }

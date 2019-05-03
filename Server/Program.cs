@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChatLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -27,7 +28,9 @@ namespace Server
             _listener = new TcpListener(IPAddress.Any, _serverPort);
             _listener.Start();
             RecievePackets();
-            
+
+            Console.WriteLine("--------------Server started--------------");
+
             while (true)
             {
                 message = Console.ReadLine();
@@ -133,66 +136,6 @@ namespace Server
         static void PacketRecievedRaise(Packet packet)
         {
             PacketRecieved?.Invoke(packet);
-        }
-    }
-    
-    class User
-    {
-        public string Name { get; set; }
-        public int Port { get; set; }
-        public IPAddress IP { get; set; }
-
-        public User(string name, int port, IPAddress ip)
-        {
-            Name = name;
-            Port = port;
-            IP = ip;
-        }
-
-        public User(string name)
-        {
-            Name = name;
-        }
-    }
-    
-    abstract class Packet
-    {
-        protected const char DELIM = '|';
-
-        public abstract override string ToString();
-
-        public static Packet Parse(string packet, IPAddress senderIP)
-        {
-            string[] split = packet.Split(DELIM);
-
-            switch (split[0])
-            {
-                case MessagePacket.Header:
-                    return new MessagePacket(new User(split[1], int.Parse(split[3]), senderIP), split[2]);
-                default:
-                    throw new ArgumentException("Can not convert string to Packet");
-            }
-        }
-    }
-
-    class MessagePacket : Packet
-    {
-        public const string Header = "Message";
-        public User Sender { get; set; }
-        public string Text { get; set; }
-
-        public MessagePacket(User sender, string text)
-        {
-            Sender = sender;
-            Text = text;
-        }
-
-        public override string ToString()
-        {
-            if (Sender.Port == 0)
-                return $"{Header}{DELIM}{Sender.Name}{DELIM}{Text}";
-            else
-                return $"{Header}{DELIM}{Sender.Name}{DELIM}{Text}{DELIM}{Sender.Port}";
         }
     }
 }

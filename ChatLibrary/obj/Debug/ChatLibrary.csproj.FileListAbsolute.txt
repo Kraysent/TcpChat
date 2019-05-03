@@ -1,0 +1,6 @@
+D:\Coding\C#\Chat\ChatLibrary\bin\Debug\ChatLibrary.dll
+D:\Coding\C#\Chat\ChatLibrary\bin\Debug\ChatLibrary.pdb
+D:\Coding\C#\Chat\ChatLibrary\obj\Debug\ChatLibrary.csprojAssemblyReference.cache
+D:\Coding\C#\Chat\ChatLibrary\obj\Debug\ChatLibrary.csproj.CoreCompileInputs.cache
+D:\Coding\C#\Chat\ChatLibrary\obj\Debug\ChatLibrary.dll
+D:\Coding\C#\Chat\ChatLibrary\obj\Debug\ChatLibrary.pdb

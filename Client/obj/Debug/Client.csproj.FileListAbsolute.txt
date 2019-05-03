@@ -5,3 +5,6 @@ D:\Coding\C#\Chat\Client\obj\Debug\Client.csproj.CoreCompileInputs.cache
 D:\Coding\C#\Chat\Client\obj\Debug\Client.exe
 D:\Coding\C#\Chat\Client\obj\Debug\Client.pdb
 D:\Coding\C#\Chat\Client\obj\Debug\Client.csprojAssemblyReference.cache
+D:\Coding\C#\Chat\Client\bin\Debug\ChatLibrary.dll
+D:\Coding\C#\Chat\Client\bin\Debug\ChatLibrary.pdb
+D:\Coding\C#\Chat\Client\obj\Debug\Client.csproj.CopyComplete
