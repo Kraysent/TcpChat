@@ -5,10 +5,9 @@ namespace ChatLibrary.Packets
 {
     public abstract class Packet
     {
-        //Somehow create an abstract const string Header
-        protected const char DELIM = '|';
-
         public abstract User Sender { get; set; }
+
+        protected const char DELIM = '|';
 
         public abstract override string ToString();
 

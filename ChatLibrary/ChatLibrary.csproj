@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client.cs" />
     <Compile Include="Packets\MessagePacket.cs" />
     <Compile Include="Packets\Packet.cs" />
     <Compile Include="Packets\RegistrationRequestPacket.cs" />
