@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 
 namespace ChatLibrary
 {
@@ -19,6 +20,27 @@ namespace ChatLibrary
         {
             Name = name;
         }
-    }
 
+        public override bool Equals(object obj)
+        {
+            var user = obj as User;
+            return user != null &&
+                   Name == user.Name;
+        }
+
+        public override int GetHashCode()
+        {
+            return 539060726 + EqualityComparer<string>.Default.GetHashCode(Name);
+        }
+
+        public static bool operator ==(User user1, User user2)
+        {
+            return EqualityComparer<User>.Default.Equals(user1, user2);
+        }
+
+        public static bool operator !=(User user1, User user2)
+        {
+            return !(user1 == user2);
+        }
+    }
 }

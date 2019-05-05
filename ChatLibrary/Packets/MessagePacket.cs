@@ -3,7 +3,7 @@
     public class MessagePacket : Packet
     {
         public const string Header = "Message";
-        public User Sender { get; set; }
+        public override User Sender { get; set; }
         public string Text { get; set; }
 
         public MessagePacket(User sender, string text)

@@ -6,8 +6,9 @@ namespace ChatLibrary.Packets
     public abstract class Packet
     {
         //Somehow create an abstract const string Header
-
         protected const char DELIM = '|';
+
+        public abstract User Sender { get; set; }
 
         public abstract override string ToString();
 
@@ -24,6 +25,8 @@ namespace ChatLibrary.Packets
             {
                 case MessagePacket.Header:
                     return new MessagePacket(new User(split[1]), split[2]);
+                case RegistrationResponsePacket.Header:
+                    return new RegistrationResponsePacket(new User(split[1]), bool.Parse(split[2]), split[3]);
                 default:
                     throw new ArgumentException("Can not convert string to Packet");
             }

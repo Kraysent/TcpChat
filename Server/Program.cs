@@ -95,8 +95,9 @@ namespace Server
                 if (!UserRegistered(register.Sender))
                 {
                     RegisterUser(register.Sender);
-                    Console.WriteLine($"{register.Sender.Name} connected to chat!");
-                    SendPacket(new MessagePacket(new User("Server"), $"{register.Sender.Name} connected to chat!"));
+                    Console.WriteLine($"New user {register.Sender.Name} connected to chat!");
+                    SendPacket(new RegistrationResponsePacket(register.Sender, true, "Success."));
+                    SendPacket(new MessagePacket(new User("Server"), $"New user {register.Sender.Name} connected to chat!"));
                 }
             }
         }

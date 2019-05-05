@@ -23,7 +23,7 @@ namespace Client
 
         static void Main(string[] args)
         {
-            string message, name;
+            string message, name, mode;
 
             PacketRecieved += ProcessPacket;
 
@@ -33,17 +33,26 @@ namespace Client
             RecievePackets();
 
             Console.WriteLine("--------------Client started--------------");
+            Console.Write("Do you want to register (r) or to login (l): ");
+            mode = Console.ReadLine();
 
-            Console.Write("Enter your name: ");
-            name = Console.ReadLine();
-            _currentUser = new User(name, _clientPort, _clientIP);
-            SendPacket(new RegistrationRequestPacket(_currentUser));
-            
-            while (true)
+            if (mode == "r")
             {
-                message = Console.ReadLine();
+                Console.Write("Enter your name: ");
+                name = Console.ReadLine();
+                _currentUser = new User(name, _clientPort, _clientIP);
+                SendPacket(new RegistrationRequestPacket(_currentUser));
+                
+                while (true)
+                {
+                    message = Console.ReadLine();
 
-                SendPacket(new MessagePacket(_currentUser, message));
+                    SendPacket(new MessagePacket(_currentUser, message));
+                }
+            }
+            else if (mode == "l")
+            {
+                //Implemention of logging system
             }
         }
 
@@ -87,6 +96,20 @@ namespace Client
 
                 if (msg.Sender.Name != _currentUser.Name)
                     Console.WriteLine($"{msg.Sender.Name}: {msg.Text}");
+            }
+
+            if (packet is RegistrationResponsePacket)
+            {
+                RegistrationResponsePacket reg = packet as RegistrationResponsePacket;
+
+                if (reg.Result == true && reg.Sender == _currentUser)
+                {
+                    Console.WriteLine($"Registration succeed, message: {reg.RegistrationMessage}.");
+                }
+                else if (reg.Result == false && reg.Sender == _currentUser)
+                {
+                    Console.WriteLine($"Registration faliled, message: {reg.RegistrationMessage}.");
+                }
             }
         }
         

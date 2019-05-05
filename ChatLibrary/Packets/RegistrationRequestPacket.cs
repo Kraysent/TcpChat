@@ -4,8 +4,8 @@ namespace ChatLibrary.Packets
 {
     public class RegistrationRequestPacket : Packet
     {
-        public const string Header = "Registration";
-        public User Sender { get; set; }
+        public const string Header = "RegistrationRequest";
+        public override User Sender { get; set; }
 
         public RegistrationRequestPacket(User sender)
         {
